@@ -34,12 +34,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         location = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-
         String bestProvider = location.getBestProvider(criteria, true);
 
         //aksi bila user tidak mengaktifkan GPS
@@ -54,14 +48,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         //mengambil lokasi terbaru
+        location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         Location locationNow = location.getLastKnownLocation(bestProvider);
-        tampilkanLokasi(locationNow);
+
+        if (locationNow != null) {
+            onLocationChanged(locationNow);
+        }
 
         //request update lokasi  tiap 1000 ms
-        location.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,1000,0,this);
+
 
     }
-
 
     public void showSettingAlertGps() {
 
